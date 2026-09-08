@@ -1,0 +1,51 @@
+cd /var/www/html
+save the file as index.php
+
+---------------------------------------------------------------------------------------------
+
+<html>
+<head><title>Contact Form</title></head>
+<body>
+<h2>Contact Form</h2>
+<form method="post" action="">
+  Name: <input type="text" name="name"><br><br>
+  Email: <input type="email" name="email"><br><br>
+  Message:<br>
+  <textarea name="message"></textarea><br><br>
+  <input type="submit" value="Submit">
+</form>
+</body>
+</html>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $servername = "your-rds-endpoint.amazonaws.com";
+  $username = "admin";
+  $password = "Admin12345";
+  $dbname = "contact_db";
+
+  $conn = new mysqli($servername, $username, $password, $dbname);
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+  $name = $_POST['name'];
+  $email = $_POST['email'];
+  $message = $_POST['message'];
+
+  $sql = "INSERT INTO contact_form (name, email, message)
+          VALUES ('$name', '$email', '$message')";
+
+  if ($conn->query($sql) === TRUE) {
+    echo "✅ Message saved successfully!";
+  } else {
+    echo "❌ Error: " . $sql . "<br>" . $conn->error;
+  }
+
+  $conn->close();
+}
+?>
+
+-----------------------------------------------------------------------------------------------
+Replace your-rds-endpoint.amazonaws.com with your actual RDS endpoint.
+Replace your-rds-username , password , dbname with your actual RDS 
