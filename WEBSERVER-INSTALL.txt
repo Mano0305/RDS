@@ -1,0 +1,3 @@
+sudo yum install httpd php php-mysqli -y
+sudo systemctl enable httpd
+sudo systemctl start httpd
