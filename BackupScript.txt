@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Variables
+DATE=$(date +%F-%H-%M)
+DB_USER="admin"
+DB_PASS="Admin12345"
+DB_NAME="contact_db"
+RDS_ENDPOINT="your-rds-endpoint.amazonaws.com"
+S3_BUCKET="s3://your-bucket-name/backups/"
+
+# Backup file name
+BACKUP_FILE="/tmp/contact_db_$DATE.sql"
+
+# Dump database
+mysqldump -h $RDS_ENDPOINT -u $DB_USER -p$DB_PASS $DB_NAME > $BACKUP_FILE
+
+# Push to S3
+aws s3 cp $BACKUP_FILE $S3_BUCKET
+
+# Remove local backup
+rm $BACKUP_FILE
